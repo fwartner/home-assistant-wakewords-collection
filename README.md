@@ -14,3 +14,8 @@ If there are any security related concerns drop me a mail to florian@wartner.io 
 ## Supporting
 You love the collection and would like to support my work?
 [Sponsor me on GitHub](https://github.com/sponsors/fwartner)!
+
+## Related Projects
+Make sure to check out my other Home Assistant related projects:
+
+- [My Config for Home Assistant](https://github.com/fwartner/homeassistant-config)
