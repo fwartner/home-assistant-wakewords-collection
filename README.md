@@ -1,3 +1,5 @@
+![banner_wwc](https://github.com/fwartner/home-assistant-wakewords-collection/assets/6692500/afa694ab-7329-4a13-a83c-e8f94ca3bcb0)
+
 # Home Assistant Wake-Word Collection
 
 Welcome to the community-driven collection of wake-words for Home Assistant!
