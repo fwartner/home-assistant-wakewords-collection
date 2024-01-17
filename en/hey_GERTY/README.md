@@ -2,6 +2,6 @@
 
 Inspired by: [GERTY Robot](https://en.wikipedia.org/wiki/Moon_(2009_film))
 
-## hal_v1.tflite
+## hey_GERTY.tflite
 
 This model reacts to `Hey GERTY`.
