@@ -2,7 +2,7 @@
 
 Inspired by: [Rick Sanchez](https://en.wikipedia.org/wiki/Rick_Sanchez)
 
-## hey_potato.tflite
+## hey_rick.tflite
 
 This model reacts to `Hey Rick`.
 
