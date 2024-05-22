@@ -1,0 +1,12 @@
+{
+  "type": "micro",
+  "wake_word": "andromeda",
+  "author": "Marcelo Costa",
+  "website": "http://192.168.250.133/",
+  "model": "./andromeda.tflite",
+  "version": 1,
+  "micro": {
+    "probability_cutoff": 0.5,
+    "sliding_window_average_size": 10
+  }
+}
