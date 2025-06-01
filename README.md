@@ -5,7 +5,7 @@
 Welcome to the community-driven collection of wake words for Home Assistant using [openWakeWord](https://github.com/dscripka/openWakeWord) wake word detection system!
 
 ## Easy Install
-Check out [WakeWords Installer](https://github.com/fwartner/ha-openwakeword-installer)!
+Check out [WakeWords Installer](https://github.com/fwartner/home-assistant-wakeword-installer))!
 
 ## Usage Guidelines
 To incorporate any of the wake words into your Home Assistant setup, please refer to the step-by-step instructions available in the [Home Assistant documentation](https://www.home-assistant.io/voice_control/create_wake_word/?ref=wartner.io#to-add-your-personal-wake-word-to-home-assistant).
