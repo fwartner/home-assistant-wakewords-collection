@@ -1,0 +1,59 @@
+name: Convert TFLite to ONNX
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.tflite'
+      - '.github/workflows/convert-tflite-to-onnx.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.tflite'
+      - '.github/workflows/convert-tflite-to-onnx.yml'
+
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Conversion mode'
+        required: true
+        default: 'sample'
+        type: choice
+        options:
+        - sample
+        - all
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Convert TFLite to ONNX
+        run: |
+          docker build -t wakeword-converter conversions/
+          if [ "${{ github.event.inputs.mode }}" = "sample" ]; then
+            docker run --rm -v $PWD:/workspace -w /workspace wakeword-converter --sample
+          else
+            docker run --rm -v $PWD:/workspace -w /workspace wakeword-converter
+          fi
+
+      - name: Commit results
+        if: github.event_name == 'push'
+        run: |
+          git add .
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git commit -m "Actions: TFLite to ONNX Conversion"
+          git push origin main
