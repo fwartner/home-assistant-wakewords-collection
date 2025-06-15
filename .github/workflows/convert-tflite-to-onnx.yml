@@ -33,6 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Convert TFLite to ONNX
         run: |
@@ -44,6 +45,7 @@ jobs:
           fi
 
       - name: Commit results
+        if: github.event_name == 'push'
         run: |
           git add .
           if git diff --cached --quiet; then
@@ -54,4 +56,4 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git commit -m "Actions: TFLite to ONNX Conversion"
-          git push origin HEAD:main
+          git push origin main
