@@ -1,6 +1,6 @@
-# TFLite to ONNX Conversion
+# Automatic TFLite to ONNX Conversion Action
 
-Automatically searches for `.tflite` files without a matching `.onnx` format when pushed/pulled to the repository, and creates a converted version next to the original. 
+Automatically searches for all `.tflite` files without a matching `.onnx` format when pushed/pulled to the repository, and creates a converted version next to the original if not already existing
 
 ## Triggers
 - Push with `.tflite` files

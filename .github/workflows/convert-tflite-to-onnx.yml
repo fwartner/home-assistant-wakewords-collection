@@ -1,10 +1,10 @@
 name: Convert TFLite to ONNX
 
 on:
-  # push:
-  #   paths: ['**/*.tflite']
-  # pull_request:
-  #   paths: ['**/*.tflite']
+  push:
+    paths: ['**/*.tflite']
+  pull_request:
+    paths: ['**/*.tflite']
   workflow_dispatch:
     inputs:
       mode:

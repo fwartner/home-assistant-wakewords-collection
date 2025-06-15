@@ -17,6 +17,7 @@ import onnxruntime as ort
 tf.get_logger().setLevel("ERROR")
 ort.set_default_logger_severity(3)
 
+OPSET = 15  # ONNX opset version to use for conversion
 
 def get_repo_root() -> Path:
     """Get the repository root directory."""
@@ -69,7 +70,7 @@ def convert_file(tflite_path: Path, onnx_path: Path) -> bool:
         "python", "-m", "tf2onnx.convert",
         "--tflite", str(tflite_path),
         "--output", str(onnx_path),
-        "--opset", "15"
+        "--opset", str(OPSET),
     ]
     
     try:
@@ -171,7 +172,7 @@ def validate_model(tflite_file: Path, onnx_file: Path):
         return False
 
 
-def main(sample=False, validate=False):
+def main(sample=False):
     """Main function."""
     repo_root = get_repo_root()
     print_missing_onnx_files(repo_root)

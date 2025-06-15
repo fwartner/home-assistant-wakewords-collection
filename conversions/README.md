@@ -1,4 +1,4 @@
-# Convert TFLite to ONNX
+# Manual Instructions: Convert TFLite to ONNX
 
 Converts TensorFlow Lite wakeword models to ONNX format (both are supported by OpenWakeWord, with ONNX-only on Windows)
 
