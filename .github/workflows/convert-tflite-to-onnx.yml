@@ -2,9 +2,15 @@ name: Convert TFLite to ONNX
 
 on:
   push:
-    paths: ['**/*.tflite']
+    branches: [main]
+    paths:
+      - '**/*.tflite'
+      - '.github/workflows/convert-tflite-to-onnx.yml'
   pull_request:
-    paths: ['**/*.tflite']
+    branches: [main]
+    paths:
+      - '**/*.tflite'
+      - '.github/workflows/convert-tflite-to-onnx.yml'
   workflow_dispatch:
     inputs:
       mode:
