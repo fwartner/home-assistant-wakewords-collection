@@ -3,10 +3,19 @@
 TFLite to ONNX conversion script for Home Assistant wake words.
 """
 import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
 import sys
 import subprocess
 from pathlib import Path
 from typing import List, Tuple
+import numpy as np
+import tensorflow as tf 
+import onnxruntime as ort 
+
+tf.get_logger().setLevel("ERROR")
+ort.set_default_logger_severity(3)
 
 
 def get_repo_root() -> Path:
@@ -41,7 +50,7 @@ def print_missing_onnx_files(repo_root: Path) -> None:
     missing_files = find_tflite_without_onnx(repo_root)
     
     if not missing_files:
-        print("✅ All TFLite files have corresponding ONNX files!")
+        print(" All TFLite files have corresponding ONNX files!")
         return
     
     print(f"\n📋 Found {len(missing_files)} TFLite files without corresponding ONNX files:")
@@ -73,8 +82,6 @@ def convert_file(tflite_path: Path, onnx_path: Path) -> bool:
     except subprocess.TimeoutExpired:
         print(f"⚠️  Conversion timeout for {tflite_path.name}")
         return False
-        print(f"⚠️  Conversion timeout for {tflite_path.name}")
-        return False
 
 
 def needs_conversion(tflite_file: Path, onnx_file: Path) -> bool:
@@ -99,7 +106,12 @@ def convert_all_files(repo_root: Path, sample_only: bool = False) -> Tuple[int, 
         print(f"Converting {tflite_file.name}...")
         
         if convert_file(tflite_file, onnx_file):
-            print(f"Created {onnx_file.name}")
+            # Validate the converted model against the original TFLite model
+            if validate_model(tflite_file, onnx_file):
+                print(f" Comparison and validation successful for {onnx_file.name}")
+            else:
+                print(f"❌ Comparison and validation failed for {onnx_file.name}")
+            
             converted_count += 1
         else:
             print(f"Failed to convert {tflite_file.name}")
@@ -111,7 +123,55 @@ def convert_all_files(repo_root: Path, sample_only: bool = False) -> Tuple[int, 
     return converted_count, failed_count
 
 
-def main(sample=False):
+def validate_model(tflite_file: Path, onnx_file: Path):
+    """Test both TFLite and ONNX models with the same input and print results."""
+    if not onnx_file.exists():
+        print("No ONNX file to compare with")
+        return
+    
+    try:
+        # Load TFLite model
+        interpreter = tf.lite.Interpreter(model_path=str(tflite_file))
+        interpreter.allocate_tensors()
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+        onnx_session = ort.InferenceSession(str(onnx_file)) 
+
+        # Create same random input for both
+        # Should be enough to quick check most models, though not fully rigorous
+        input_shape = input_details[0]['shape']
+        test_input = np.random.randn(*input_shape).astype(np.float32)
+        
+        # Run TFLite
+        interpreter.set_tensor(input_details[0]['index'], test_input)
+        interpreter.invoke()
+        tflite_output = interpreter.get_tensor(output_details[0]['index'])
+        
+        # Run ONNX
+        onnx_inputs = onnx_session.get_inputs()
+        onnx_output = onnx_session.run(None, {onnx_inputs[0].name: test_input})[0]
+
+        # check if results are 0
+        if np.all(tflite_output == 0) and np.all(onnx_output == 0):        
+            print("Ambiguous results: Both outputs are zero")
+            return True
+        # check if outputs are equivalent
+        equivalent = np.isclose(onnx_output, tflite_output, atol=1e-2).all()
+        if equivalent:
+            return True
+
+        print("Outputs are not equivalent")
+        print(f"TFLite output: {tflite_output.flatten().round(2)}")
+        print(f"ONNX output: {onnx_output.flatten().round(2)}")
+        return False
+
+
+    except Exception as e:
+        print(f"Unexpected Failure: {e}")
+        return False
+
+
+def main(sample=False, validate=False):
     """Main function."""
     repo_root = get_repo_root()
     print_missing_onnx_files(repo_root)
