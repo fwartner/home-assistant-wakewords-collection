@@ -54,4 +54,4 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git commit -m "Actions: TFLite to ONNX Conversion"
-          git push
+          git push origin HEAD:main
