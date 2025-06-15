@@ -3,6 +3,7 @@
 TFLite to ONNX conversion script for Home Assistant wake words.
 """
 import os
+
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
@@ -83,7 +84,7 @@ def convert_file(tflite_path: Path, onnx_path: Path) -> bool:
     except subprocess.TimeoutExpired:
         print(f"⚠️  Conversion timeout for {tflite_path.name}")
         return False
-
+      
 
 def needs_conversion(tflite_file: Path, onnx_file: Path) -> bool:
     """Check if a TFLite file needs to be converted to ONNX."""
@@ -107,12 +108,14 @@ def convert_all_files(repo_root: Path, sample_only: bool = False) -> Tuple[int, 
         print(f"Converting {tflite_file.name}...")
         
         if convert_file(tflite_file, onnx_file):
+
             # Validate the converted model against the original TFLite model
             if validate_model(tflite_file, onnx_file):
                 print(f" Comparison and validation successful for {onnx_file.name}")
             else:
                 print(f"❌ Comparison and validation failed for {onnx_file.name}")
             
+
             converted_count += 1
         else:
             print(f"Failed to convert {tflite_file.name}")
@@ -122,6 +125,7 @@ def convert_all_files(repo_root: Path, sample_only: bool = False) -> Tuple[int, 
             break
     
     return converted_count, failed_count
+
 
 
 def validate_model(tflite_file: Path, onnx_file: Path):
@@ -170,7 +174,6 @@ def validate_model(tflite_file: Path, onnx_file: Path):
     except Exception as e:
         print(f"Unexpected Failure: {e}")
         return False
-
 
 def main(sample=False):
     """Main function."""

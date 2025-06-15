@@ -11,6 +11,7 @@ on:
     paths:
       - '**/*.tflite'
       - '.github/workflows/convert-tflite-to-onnx.yml'
+
   workflow_dispatch:
     inputs:
       mode:
