@@ -1,0 +1,36 @@
+alexa_v1 wake-word model for openWakeWord
+
+The model files are licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The model was trained with the following data and software.
+
+Training data
+
+- LibriSpeech ASR corpus, train-clean-100. V. Panayotov, G. Chen, D. Povey,
+  and S. Khudanpur, "LibriSpeech: an ASR corpus based on public domain audio
+  books", ICASSP 2015. Licence: CC BY 4.0. https://www.openslr.org/12/
+- FSD50K. E. Fonseca, X. Favory, J. Pons, F. Font, and X. Serra, "FSD50K: an
+  open dataset of human-labeled sound events", IEEE/ACM Transactions on Audio,
+  Speech, and Language Processing, 2022. Dataset licence: CC BY 4.0.
+  https://zenodo.org/records/4060432
+  This model used 3,500 development clips licensed CC0 1.0 or CC BY 3.0.
+  ATTRIBUTION_FSD50K.tsv lists each clip with its title, author, and licence.
+- Synthetic speech from the Piper voice en_US-libritts-high
+  (https://huggingface.co/rhasspy/piper-voices, MIT). The voice was trained on
+  LibriTTS train-clean-360: H. Zen, V. Dang, R. Clark, Y. Zhang, R. J. Weiss,
+  Y. Jia, Z. Chen, and Y. Wu, "LibriTTS: a corpus derived from LibriSpeech for
+  text-to-speech", Interspeech 2019. Licence: CC BY 4.0.
+  https://www.openslr.org/60/
+
+Software and networks
+
+- openWakeWord 0.6.0 training code. Apache 2.0.
+  https://github.com/dscripka/openWakeWord
+- The feature models melspectrogram.onnx and embedding_model.onnx from
+  openWakeWord v0.5.1 computed the training features. The embedding model
+  holds the weights of the Google speech embedding. Apache 2.0.
+  https://www.kaggle.com/models/google/speech-embedding
+- pyroomacoustics 0.10.1 simulated the room impulse responses. MIT.
+  https://github.com/LCAV/pyroomacoustics
+- onnx2tf 2.6.9 converted the ONNX file to TFLite.
+  https://github.com/PINTO0309/onnx2tf
